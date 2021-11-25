@@ -17,7 +17,6 @@ nkf KEN_ALL.CSV |
       {
         gsub(i, "", n[i])
         print i","a[i]
-        fflush()
       }
     }
   ' | sort -t, -nrk2 >> RES.CSV
