@@ -30,6 +30,7 @@ fi
 echo "[Parsing......]"
 
 : > mismatch
+echo "name,count" > RES.CSV
 
 nkf KEN_ALL.CSV |
   awk -F'"?,"?' '
@@ -49,7 +50,7 @@ nkf KEN_ALL.CSV |
         print i","a[i]","n[i]"/"
       }
     }
-  ' | sort -t, -nrk2 > RES.CSV
+  ' | sort -t, -nrk2 >> RES.CSV
 
 echo "[Checking.....]"
 
@@ -62,7 +63,7 @@ while read -r pref cnt detail; do
     echo "==="
     echo >> mismatch
   fi
-done < <(tr < RES.CSV , \ )
+done < <(tr < RES.CSV , \ | sed 1d)
 
 correct="$(wc < mismatch -l)"
 echo -n "[Wrong answers]: ${correct}/$(wc < RES.CSV -l) lines"
