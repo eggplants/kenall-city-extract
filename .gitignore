@@ -290,3 +290,4 @@ TSWLatexianTemp*
 _minted-*/
 *.pdf
 example/
+*.bak*
