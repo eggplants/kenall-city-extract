@@ -1,72 +1,77 @@
 \documentclass[a4j]{jarticle}
-
+% import package
 \usepackage{url}
 \usepackage{csvsimple}
 \usepackage{multicol}
 \usepackage{minted}
 \usemintedstyle{vs}
-
+% meta
 \setlength{\columnsep}{5mm}
 \title{201811528}
 \author{春名航亨}
-
+% macro to use figure macro in multicols
 \makeatletter
 \newenvironment{figurehere}
   {\def\@captype{figure}}
   {}
-
+% macro to use tble macro in multicols
 \makeatletter
 \newenvironment{tablehere}
   {\def\@captype{table}}
   {}
-
+% doc - BEGIN
 \begin{document}
 \columnseprule=0.3mm
 \maketitle
-
+% abstract on top-center
 \begin{abstract}
+  %
   通称「\texttt{KEN\_ALL.csv}」と呼ばれる、日本郵政が提供している全国住所データCSVから都道府県別に市の名前を抽出し、
   その数を集計した表をシェルスクリプトによって作成した。このレポートは、その結果を報告するためのものである。
+  %
 \end{abstract}
-
+% split page into 2 col
 \begin{multicols}{2}
-
+  %
   \section{引用を試す}
-
+  %
   このレポートでは、TeXで文書を記述し、PDFへ組版するという練習も兼ねている。その一環としてbibファイルを用いた文献引用を行う。
   この論文~\cite{wajima2019}とこの論文~\cite{ootsuka2019}はその練習に適していると言えるだろう。
-
+  %
   \section{都道府県別市の数の表作成}
-
+  %
   \subsection{概要}
-
+  %
   日本郵政は全国住所データCSV、通称「\texttt{KEN\_ALL.csv}」をWeb上で公開し、一般に提供している。その中では、市区町村が分かち書きや分類がなされることなく1カラムに結合されて記されている。
   今回の課題としてそこから市のみを正規表現を用いたプログラムによって、都道府県名と合わせて抽出し、都道府県別にその数を集計した結果を表形式で整形してレポートに添付する。
-
+  %
   \subsection{難しかったところ}
-
+  %
   この課題の要点の一つとして、 \texttt{.*市} や \texttt{.*郡} など、区分に対する正規表現を用いようと試みた際、「市」や「郡」を構成文字に含む市区町村にマッチしてしまい、結果がおかしくなってしまうことの解決がある。
   自分も課題を進める中で、市と郡が併存しているケースがないことを知り、市区町村カラムに「郡」を含む行を削除する処理を書くため「\texttt{.*郡}」のマッチを行ったが、この正規表現では「郡山市」などにもマッチしてしまいうまく行かなかった。
   そのため最終的にそのようなケースを、 \texttt{.*郡} の結果から除外することで解決した。
-
+  %
   \subsection{結果}
-
+  %
   作成したコード(図\ref{example})と表\ref{res}を以下に示す。このコードは\texttt{KEN\_ALL.CSV}の文字コードをUTF-8に変換した後AWKで一行ずつ読み込み、
-  市区町村カラムの値が\texttt{\^.*市}にマッチしていて、\texttt{.+郡}にマッチしないか\texttt{(郡山|小郡|蒲郡)市}にマッチするものから\texttt{\^.*市}を抽出し都道府県ごとにカウントしていく。そしてその結果をCSV形式で\texttt{RES.CSV}に出力するものである。
-
+  市区町村カラムの値が\texttt{\^.*市}にマッチしていて、\texttt{.+郡}にマッチしないか\texttt{(郡山|小郡|蒲郡)市}にマッチするものから\texttt{\^.*市}を抽出し都道府県ごとにカウントしていく。
+  そしてその結果をCSV形式で\texttt{RES.CSV}に出力するものである。
+  %
   \begin{figurehere}
+    % code block
     \inputminted{bash}{extshort.sh}
     \caption{extshort.sh}
     \label{example}
+    %
   \end{figurehere}
-
+  %
   \vspace{1zh}
-
+  %
   \begin{tablehere}
+    % CSV
     \begin{tabular}{cc}
-
+      % csv - left
       \begin{minipage}{.41\linewidth}
-
         \begin{tablehere}
           \begin{tabular}{l|c}
             \bfseries Name & \bfseries Count
@@ -74,10 +79,9 @@
             {                                \\\hline\name\ & \count}
           \end{tabular}
         \end{tablehere}
-
       \end{minipage} &
+      % csv - right
       \begin{minipage}{.41\linewidth}
-
         \begin{tablehere}
           \begin{tabular}{l|c}
             \bfseries ... & \bfseries ...
@@ -85,26 +89,26 @@
             {                             \\\hline\name\ & \count}
           \end{tabular}
         \end{tablehere}
-
       \end{minipage}
     \end{tabular}
     \caption{RES.CSV}
     \label{res}
+    %
   \end{tablehere}
-
+  % fill extra space of col with blank
   \vfill\null
+  % move to next col
   \columnbreak
-
+  %
   \section{総括}
+  %
   今回のレポートでLaTeX組版について復習できた。それに加え\texttt{KEN\_ALL.csv}のパースやその注意点についても知れた。
   ちなみに、今回生成したデータファイルや図\ref{example}のコードに正誤判定機能やデータダウンロード機能などを追加した完全版などをまとめたリポジトリをGitHub上にアップロードしている。
   \url{https://github.com/eggplants/kenall-city-extract}
-
-
+  % insert reference section
   \bibliographystyle{jplain}
   \bibliography{source}
 
 \end{multicols}
 
 \end{document}
-
