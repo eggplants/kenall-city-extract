@@ -1,3 +1,4 @@
+% --- BEGIN: preamble ---
 \documentclass[a4j]{jarticle}
 % import package
 \usepackage{url}
@@ -19,7 +20,9 @@
 \newenvironment{tablehere}
   {\def\@captype{table}}
   {}
-% doc - BEGIN
+% --- END: preamble ---
+%
+% --- BEGIN: document ---
 \begin{document}
 \columnseprule=0.3mm
 \maketitle
@@ -64,7 +67,7 @@
     \label{example}
     %
   \end{figurehere}
-  %
+  % insert margin
   \vspace{1zh}
   %
   \begin{tablehere}
@@ -108,7 +111,7 @@
   % insert reference section
   \bibliographystyle{jplain}
   \bibliography{source}
-
+  %
 \end{multicols}
-
 \end{document}
+% --- END: document ---
